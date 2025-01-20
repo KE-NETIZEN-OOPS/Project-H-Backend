@@ -1,10 +1,11 @@
 const express = require('express');
 const commentRouter = express.Router();
-const verifyToken = require('../middleware/auth/verifyToken')
-const checkObjectID = require('../middleware/main/checkObjectID')
+const { requireAuth } = require('@clerk/clerk-sdk-node');
+const checkObjectID = require('../middleware/main/checkObjectID');
 
-commentRouter.use(verifyToken)
-commentRouter.use(checkObjectID)
+commentRouter.use(requireAuth); // Protect all comment routes with Clerk
+commentRouter.use(checkObjectID);
+
 commentRouter.get('/:id', require('../controllers/comment/getCommentById'));
 commentRouter.patch('/:id', require('../controllers/comment/updateComment'));
 commentRouter.delete('/:id', require('../controllers/comment/deleteComment'));
